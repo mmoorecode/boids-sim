@@ -6,8 +6,8 @@ Boid::Boid()
 	float initX = rand() % 200 + 350.0f;
 	float initY = rand() % 200 + 350.0f;
 
-	xVel = 1.5f;
-	yVel = 1.5f;
+	xVel = rand() % 20;
+	yVel = rand() % 20;
 
 	sprite.setPosition(initX, initY);
 	sprite.setFillColor(sf::Color::Red);

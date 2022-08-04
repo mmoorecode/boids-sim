@@ -26,6 +26,7 @@ private:
 	int windowWidth = 800;
 	int windowHeight = 800;
 	int maxFramerate = 60;
+	sf::Clock deltaClock;
 
 	int numBoids = 500;
 	Boid* boids;
@@ -44,4 +45,8 @@ private:
 
 	void initWindow();
 	void initBoids();
+	void initUI();
+
+	void updateUI();
+	void renderUI();
 };

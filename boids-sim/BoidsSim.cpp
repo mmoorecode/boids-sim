@@ -1,8 +1,12 @@
 #include "BoidsSim.h"
 
+#include "imgui\imgui.h"
+#include "imgui\imgui-SFML.h"
+
 BoidsSim::BoidsSim()
 {
 	initWindow();
+	initUI();
 	initBoids();
 }
 
@@ -15,6 +19,34 @@ void BoidsSim::initWindow()
 void BoidsSim::initBoids()
 {
 	boids = new Boid[numBoids];
+}
+
+void BoidsSim::initUI()
+{
+	ImGui::SFML::Init(window);
+}
+
+void BoidsSim::updateUI()
+{
+	ImGui::SFML::Update(window, deltaClock.restart());
+
+	ImGui::Begin("Parameters");
+	ImGui::SliderFloat("Protected Radius", &protectedRadius, 0.0f, 10.0f);
+	ImGui::SliderFloat("Visual Radius", &visualRadius, 10.5f, 100.0f);
+	ImGui::SliderFloat("Centering Factor", &centeringFactor, 0.0005f, 1.0f);
+	ImGui::SliderFloat("Matching Factor", &matchingFactor, 0.05f, 2.0f);
+	ImGui::SliderFloat("Avoid Factor", &avoidFactor, 0.05f, 2.0f);
+	ImGui::SliderFloat("Turn Factor", &turnFactor, 0.1f, 2.0f);
+	ImGui::SliderFloat("Max Speed", &maxSpeed, 5.5f, 20.0f);
+	ImGui::SliderFloat("Min Speed", &minSpeed, 0.5f, 5.0f);
+
+	ImGui::Text("");
+	ImGui::End();
+}
+
+void BoidsSim::renderUI()
+{
+	ImGui::SFML::Render(window);
 }
 
 void BoidsSim::updateBoids()
@@ -123,6 +155,7 @@ void BoidsSim::updateBoids()
 void BoidsSim::update()
 {
 	// Poll events
+	ImGui::SFML::ProcessEvent(event);
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
@@ -131,6 +164,7 @@ void BoidsSim::update()
 			window.close();
 	}
 
+	updateUI();
 	updateBoids();
 }
 
@@ -147,6 +181,8 @@ void BoidsSim::render()
 
 	renderBoids();
 	
+	renderUI();
+
 	window.display();
 }
 
@@ -157,4 +193,5 @@ const sf::RenderWindow & BoidsSim::getWindow() const
 
 BoidsSim::~BoidsSim()
 {
+	ImGui::SFML::Shutdown();
 }
